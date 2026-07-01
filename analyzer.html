@@ -1,0 +1,185 @@
+<!-- ===================================
+     صفحة تحليل الروابط الشاملة
+     =================================== -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محلل الروابط الشامل - جمع كل المعلومات</title>
+    <link rel="stylesheet" href="style-analyzer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- الرأس -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🔍 محلل الروابط الشامل</h1>
+                <p>جمع كل المعلومات والبيانات عن أي رابط على الإنترنت</p>
+            </div>
+        </header>
+
+        <!-- قسم الإدخال -->
+        <div class="input-section">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="urlInput" 
+                    class="url-input" 
+                    placeholder="أدخل الرابط (مثال: github.com أو https://www.example.com)"
+                    autocomplete="off"
+                >
+                <button class="btn-analyze" id="analyzeBtn">
+                    <i class="fas fa-search"></i> تحليل الآن
+                </button>
+            </div>
+            <div class="quick-links">
+                <span>أمثلة سريعة:</span>
+                <button class="quick-link" data-url="github.com">GitHub</button>
+                <button class="quick-link" data-url="google.com">Google</button>
+                <button class="quick-link" data-url="stackoverflow.com">StackOverflow</button>
+            </div>
+        </div>
+
+        <!-- مؤشر التحميل -->
+        <div class="loading-section" id="loadingSection" style="display: none;">
+            <div class="spinner"></div>
+            <p>🔄 جاري تحليل الرابط...</p>
+            <p class="loading-detail">قد يستغرق بعض الوقت، يرجى الانتظار</p>
+        </div>
+
+        <!-- قسم النتائج -->
+        <div class="results-section" id="resultsSection" style="display: none;">
+            
+            <!-- شريط الملخص السريع -->
+            <div class="summary-bar">
+                <div class="summary-item">
+                    <span class="label">الرابط:</span>
+                    <span class="value" id="summaryURL"></span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">الأمان:</span>
+                    <span class="value" id="summarySecure"></span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">التكنولوجيات:</span>
+                    <span class="value" id="summaryTechs"></span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">الـ APIs:</span>
+                    <span class="value" id="summaryAPIs"></span>
+                </div>
+            </div>
+
+            <!-- التبويبات -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="overview">📊 نظرة عامة</button>
+                <button class="tab-btn" data-tab="url-details">🔗 تفاصيل الرابط</button>
+                <button class="tab-btn" data-tab="technologies">⚙️ التكنولوجيات</button>
+                <button class="tab-btn" data-tab="security">🔒 الأمان</button>
+                <button class="tab-btn" data-tab="metadata">📝 البيانات الوصفية</button>
+                <button class="tab-btn" data-tab="links">🔗 الروابط</button>
+                <button class="tab-btn" data-tab="contact">📧 جهات الاتصال</button>
+                <button class="tab-btn" data-tab="media">🖼️ الوسائط</button>
+                <button class="tab-btn" data-tab="advanced">🔬 متقدم</button>
+            </div>
+
+            <!-- محتوى التبويبات -->
+            <div class="tabs-content">
+                
+                <!-- 1. نظرة عامة -->
+                <div class="tab-content active" id="overview">
+                    <div class="card">
+                        <h3>📊 ملخص التحليل</h3>
+                        <div id="overviewContent" class="grid-2"></div>
+                    </div>
+                </div>
+
+                <!-- 2. تفاصيل الرابط -->
+                <div class="tab-content" id="url-details">
+                    <div class="card">
+                        <h3>🔗 معلومات الرابط</h3>
+                        <div id="urlDetailsContent" class="details-table"></div>
+                    </div>
+                </div>
+
+                <!-- 3. التكنولوجيات -->
+                <div class="tab-content" id="technologies">
+                    <div id="technologiesContent"></div>
+                </div>
+
+                <!-- 4. الأمان -->
+                <div class="tab-content" id="security">
+                    <div class="card">
+                        <h3>🔒 معلومات الأمان</h3>
+                        <div id="securityContent" class="security-grid"></div>
+                    </div>
+                </div>
+
+                <!-- 5. البيانات الوصفية -->
+                <div class="tab-content" id="metadata">
+                    <div class="card">
+                        <h3>📝 البيانات الوصفية</h3>
+                        <div id="metadataContent" class="metadata-grid"></div>
+                    </div>
+                </div>
+
+                <!-- 6. الروابط -->
+                <div class="tab-content" id="links">
+                    <div id="linksContent"></div>
+                </div>
+
+                <!-- 7. جهات الاتصال -->
+                <div class="tab-content" id="contact">
+                    <div id="contactContent"></div>
+                </div>
+
+                <!-- 8. الوسائط -->
+                <div class="tab-content" id="media">
+                    <div id="mediaContent"></div>
+                </div>
+
+                <!-- 9. متقدم -->
+                <div class="tab-content" id="advanced">
+                    <div class="card">
+                        <h3>🔬 بيانات متقدمة (JSON)</h3>
+                        <button class="btn-secondary" id="downloadJSON">
+                            <i class="fas fa-download"></i> تحميل JSON
+                        </button>
+                        <pre id="advancedContent" class="json-output"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار التصدير -->
+            <div class="export-section">
+                <button class="btn-secondary" id="copyResults">
+                    <i class="fas fa-copy"></i> نسخ النتائج
+                </button>
+                <button class="btn-secondary" id="downloadPDF">
+                    <i class="fas fa-file-pdf"></i> تحميل PDF
+                </button>
+                <button class="btn-secondary" id="shareResults">
+                    <i class="fas fa-share"></i> مشاركة
+                </button>
+            </div>
+        </div>
+
+        <!-- رسالة الخطأ -->
+        <div class="error-section" id="errorSection" style="display: none;">
+            <div class="error-card">
+                <h3>❌ خطأ في التحليل</h3>
+                <p id="errorMessage"></p>
+                <button class="btn-secondary" onclick="location.reload()">
+                    <i class="fas fa-redo"></i> إعادة محاولة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="comprehensive-analyzer.js"></script>
+    <script src="ui-handler.js"></script>
+</body>
+</html>
